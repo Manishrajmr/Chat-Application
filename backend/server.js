@@ -1,8 +1,11 @@
 const express = require("express");
 const app = express();
 const {chats} = require('./data/data');
+const connectDB = require("./config/db");
+
 
 require('dotenv').config();
+connectDB();
 
 app.get("/", (req, res) => {
   res.send("Chat Application Server is running...");
