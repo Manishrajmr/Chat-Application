@@ -26,7 +26,7 @@ const Homepage = () => {
         borderRadius="lg"
         borderWidth="1px"
         >
-        <Text fontSize="2xl" fontFamily="revert">
+        <Text fontSize="2xl" color="teal" fontFamily="revert">
           BuzzTalk
         </Text>
       </Box>

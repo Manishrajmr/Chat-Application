@@ -1,6 +1,9 @@
+"use client"
 import React from 'react';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { Toaster, toaster } from "@/components/ui/toaster"
+
 
 
 const ChatPage = () => {
@@ -19,9 +22,12 @@ const ChatPage = () => {
 
   return (
     <div>
-      {chats.map((chat) => (
+      {/* {chats.map((chat) => (
         <h1 key={chat.id}>{chat.chatName}</h1>
-      ))}
+      ))} */}
+  
+   
+     
     </div>
   );
 }
