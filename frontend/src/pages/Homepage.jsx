@@ -2,7 +2,6 @@
 import React from 'react';
 import {Box, Container,Text, Code, Stack, Tabs, useTabs } from "@chakra-ui/react"
 
- 
 
 import Login from "../components/Authentication/Login";
 import Signup from "../components/Authentication/Signup";

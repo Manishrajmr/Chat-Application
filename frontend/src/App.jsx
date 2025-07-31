@@ -11,8 +11,9 @@ function App() {
     <div className="App">
 
 
-      <Route path="/" component = {Homepage} exact />
-      <Route path="/chats" component = {ChatPage} />
+      {/* <Route path="/" component = {Homepage} exact /> */}
+      <Route path="/" component = {ChatPage} exact />
+      {/* <Route path="/chats" component = {ChatPage} /> */}
     </div>
   )
 }
