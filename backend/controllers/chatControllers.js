@@ -1,27 +1,41 @@
 const asyncHandler = require("express-async-handler");
 const Chat = require("../models/chatModel");
 const User = require("../models/userModel");
+const { default: mongoose, Mongoose } = require("mongoose");
+// const mongoose = require("mongoose");
+
+// {
+//   "userId": "64a9xyz...xyz" // jisko loggedInUser ne chat ke liye select kiya
+// }
 
 //@description     Create or fetch One to One Chat
 //@route           POST /api/chat/
 //@access          Protected
-const accessChat = asyncHandler(async (req, res) => {
-  const { userId } = req.body;
 
-  if (!userId) {
+// User ke saath 1-1 chat create ya fetch karne ka controller
+const accessChat = asyncHandler(async (req, res) => {
+    // frontend se aaya hua userId jiske saath chat chahiye
+  const { userId } = req.body;   
+
+  // agar userId nahi aaya toh bad request return karo
+
+  if (!userId) { 
     console.log("UserId param not sent with request");
     return res.sendStatus(400);
   }
 
+   // check karo kya already 1-1 chat exist karti hai dono users ke beech
+
   var isChat = await Chat.find({
-    isGroupChat: false,
-    $and: [
+    isGroupChat: false, // group chat nahi honi chahiye
+    $and: [          // dono user match hone chahiye
       { users: { $elemMatch: { $eq: req.user._id } } },
       { users: { $elemMatch: { $eq: userId } } },
     ],
   })
-    .populate("users", "-password")
-    .populate("latestMessage");
+    .populate("users", "-password")  // users ka detail lao lekin password hide karo
+    .populate("latestMessage");       // latestMessage bhi laao
+    
 
   isChat = await User.populate(isChat, {
     path: "latestMessage.sender",
