@@ -48,10 +48,6 @@ const handleSignup = async () => {
     }
   };
 
-  
-
-
-
   return (
     <Box>
       <Field.Root required mb={3}>

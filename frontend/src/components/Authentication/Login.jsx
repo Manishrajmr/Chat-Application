@@ -42,12 +42,12 @@ const Login = () => {
     <Box>
       <Field.Root required mb={3}>
       <Field.Label>Email</Field.Label>
-      <Input placeholder="me@example.com"onChange={(e)=>setEmail(e.target.value)} />
+      <Input value={email} placeholder="me@example.com"onChange={(e)=>setEmail(e.target.value)} />
     </Field.Root>
 
     <Field.Root required mb={5} >
       <Field.Label>Password</Field.Label>
-      <Input placeholder="Enter Password" onChange={(e)=>setPassword(e.target.value)} />
+      <Input value={password} placeholder="Enter Password" onChange={(e)=>setPassword(e.target.value)} />
     </Field.Root>
 
    
@@ -60,7 +60,10 @@ const Login = () => {
     </HStack>
 
      <HStack border="1px" colorPalette="teal" width="100%" >
-       <Button colorPalette="teal" w="100%" variant="outline">
+       <Button colorPalette="teal" w="100%" variant="outline" onClick={()=>{
+        setEmail("guest@gmail.com");
+        setPassword("123456");
+       }} >
         Get Guest User Credential
       </Button>
     </HStack>
