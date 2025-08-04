@@ -21,14 +21,13 @@ const Login = () => {
     }
 
     try {
-      const response = await axios.post("http://localhost:400/api/user/login", {
+      const {data} = await axios.post("http://localhost:400/api/user/login", {
         email,
         password,
       });
 
       // console.log("Login Success:", response.data);
-
-        
+       localStorage.setItem("userInfo", JSON.stringify(data));
       history.push("/chats")
     } catch (error) {
       console.error("Login Failed:", error.response?.data || error.message);

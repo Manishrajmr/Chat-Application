@@ -35,6 +35,8 @@ const accessChat = asyncHandler(async (req, res) => {
   })
     .populate("users", "-password")  // users ka detail lao lekin password hide karo
     .populate("latestMessage");       // latestMessage bhi laao
+
+    console.log(isChat);
     
 
   isChat = await User.populate(isChat, {

@@ -3,15 +3,38 @@ import { Box,Text,Menu,Portal,IconButton} from '@chakra-ui/react';
 import { Tooltip} from "@/components/ui/tooltip"
 import { Button,Avatar } from "@chakra-ui/react"
 import { useState } from 'react';
+import { toaster } from "@/components/ui/toaster"
+import axios from 'axios';
+import ChatLoading from '../ChatLoading';
+import UserListItem from '../UserAvatar/UserListItem';
+import { useHistory } from 'react-router-dom/';
+import { Spinner, VStack } from "@chakra-ui/react"
+
+import { 
+  CloseButton,
+  Drawer,
+  Input,
+  Stack,
+} from "@chakra-ui/react"
+import { useRef } from "react"
 
 import { ChatState } from '@/Context/ChatProvider';
 
+
+
+
+
 const SideDrawer = () => {
 
+  const history = useHistory();
+  
   const [search, setSearch] = useState("");
   const [searchResult, setSearchResult] = useState([]);
   const [loading, setLoading] = useState(false);
   const [loadingChat, setLoadingChat] = useState(false);
+
+  // console.log("loading chat",loadingChat);
+
 
    const {
     setSelectedChat,
@@ -21,6 +44,76 @@ const SideDrawer = () => {
     chats,
     setChats,
   } = ChatState();
+
+  const ref = useRef<HTMLInputElement>(null);
+
+
+  const handleSearch = async() =>{
+
+    if(!search){
+     alert("search name");
+     return;
+    }
+
+     try {
+      setLoading(true);
+
+     
+
+       const config = {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      };
+      console.log("started");
+
+      const { data } = await axios.get(`http://localhost:400/api/user?search=${search}`,config);
+
+      console.log(data);
+
+      setLoading(false);
+      setSearchResult(data);
+    } catch (error) {
+      
+         console.log(error.message);
+    }
+    
+  }
+
+   const accessChat = async (userId) => {
+    console.log(userId);
+    try {
+      setLoadingChat(true);
+     
+      const config = {
+        headers: {
+          "Content-type": "application/json",
+          Authorization: `Bearer ${user.token}`,
+        },
+      };
+      const { data } = await axios.post(`/api/chat`, { userId }, config);
+
+      // console.log(data);
+
+      if ( !chats.find((c) => c._id === data._id)) {
+              setChats([data, ...chats]);
+}
+      setSelectedChat(data);
+      setLoadingChat(false);
+      // onClose();
+    } catch (error) {
+     
+      alert("wrong");
+    }
+  };
+
+   const logoutHandler = () => {
+  //  localStorage.removeItem("userInfo");
+  localStorage.clear();
+   history.push("/");
+  };
+
+
 
   return (
     <>
@@ -33,8 +126,12 @@ const SideDrawer = () => {
         p="5px 10px 5px 10px"
         borderWidth="5px">
 
-    <Tooltip content="Search User to Chat">
-      <Button variant="ghost">
+    <Drawer.Root placement="left" initialFocusEl={() => ref.current}>
+
+      <Tooltip content="Search User to Chat" >
+         <Drawer.Trigger asChild>
+
+         <Button variant="ghost">
         <i class="fas fa-search"></i>
 
         <Text>
@@ -42,7 +139,58 @@ const SideDrawer = () => {
         </Text>
         
       </Button>
-    </Tooltip>
+     
+      </Drawer.Trigger>
+      </Tooltip>
+     
+      <Portal  >
+        <Drawer.Backdrop />
+        <Drawer.Positioner  >
+          <Drawer.Content >
+            <Drawer.Header>
+              <Drawer.Title>Search User</Drawer.Title>
+            </Drawer.Header>
+
+            
+            <Drawer.Body w="100%"   >
+
+             <Drawer.Body  p={0} display="flex"  gap="10px">
+
+               <Input value={search} onChange={(e)=>setSearch(e.target.value)} />
+              <Button onClick={handleSearch} >
+                Go
+              </Button>
+             </Drawer.Body>
+
+              {loading ? (
+              <ChatLoading />
+            ) : (
+              searchResult?.map((user) => (
+                <UserListItem
+                  key={user._id}
+                  user={user}
+                  handleFunction={() => accessChat(user._id)}
+                />
+              )) 
+            )}
+            {loadingChat &&   <Spinner color="teal.500" size="lg" />}
+             
+            </Drawer.Body>
+       
+            <Drawer.CloseTrigger asChild>
+              <CloseButton size="sm" />
+            </Drawer.CloseTrigger>
+          </Drawer.Content>
+        </Drawer.Positioner>
+      </Portal>
+
+    </Drawer.Root>
+
+
+
+  
+
+
 
     <Text fontSize="2xl" color="teal" >
         BuzzTalk
@@ -74,9 +222,10 @@ const SideDrawer = () => {
             <Menu.Item value="new-txt-a">
               My Profile <Menu.ItemCommand></Menu.ItemCommand>
             </Menu.Item>
-            <Menu.Item value="new-file-a">
-              Logout<Menu.ItemCommand></Menu.ItemCommand>
+            <Menu.Item value="new-file-a" onClick={logoutHandler} >
+              Logout
             </Menu.Item>
+
           
           </Menu.Content>
         </Menu.Positioner>
@@ -88,12 +237,12 @@ const SideDrawer = () => {
 
 
 
+
     </>
   );
 }
 
 
-
-
-
 export default SideDrawer;
+
+
