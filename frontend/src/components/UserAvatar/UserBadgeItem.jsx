@@ -1,0 +1,33 @@
+import React from 'react';
+import { Button } from '@chakra-ui/react';
+import { Badge, Stack } from "@chakra-ui/react"
+import { IoCloseSharp } from "react-icons/io5";
+
+
+const UserBadgeItem = ({user,handleFunction}) => {
+  return (
+
+    <Badge 
+     px={2}
+      py={1}
+      borderRadius="lg"
+      m={1}
+      mb={2}
+      variant="solid"
+      fontSize={12}
+      colorScheme="purple"
+      cursor="pointer"
+      onClick={handleFunction}
+       colorPalette="green">
+        
+    {user.name}
+
+    <IoCloseSharp />
+    	
+    
+      </Badge>
+  
+  );
+}
+
+export default UserBadgeItem;

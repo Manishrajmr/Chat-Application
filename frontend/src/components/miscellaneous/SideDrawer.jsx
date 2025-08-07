@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box,Text,Menu,Portal,IconButton} from '@chakra-ui/react';
+import { Box,Text,Menu,Portal,IconButton,Popover} from '@chakra-ui/react';
 import { Tooltip} from "@/components/ui/tooltip"
 import { Button,Avatar } from "@chakra-ui/react"
 import { useState } from 'react';
@@ -10,6 +10,7 @@ import UserListItem from '../UserAvatar/UserListItem';
 import { useHistory } from 'react-router-dom/';
 import { Spinner, VStack } from "@chakra-ui/react"
 
+
 import { 
   CloseButton,
   Drawer,
@@ -19,6 +20,7 @@ import {
 import { useRef } from "react"
 
 import { ChatState } from '@/Context/ChatProvider';
+import ProfileModal from './ProfileModal';
 
 
 
@@ -219,9 +221,17 @@ const SideDrawer = () => {
       <Portal>
         <Menu.Positioner>
           <Menu.Content>
-            <Menu.Item value="new-txt-a">
-              My Profile <Menu.ItemCommand></Menu.ItemCommand>
-            </Menu.Item>
+
+
+           
+
+            <ProfileModal>
+                <Menu.Item value="new-txt-a">
+              My Profile
+            </Menu.Item> 
+            </ProfileModal>
+           
+
             <Menu.Item value="new-file-a" onClick={logoutHandler} >
               Logout
             </Menu.Item>

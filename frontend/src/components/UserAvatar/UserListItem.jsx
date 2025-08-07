@@ -27,8 +27,7 @@ const UserListItem = ({user,handleFunction}) => {
       mb={2}
       borderRadius="lg"
     >
-
-        
+      
              <Avatar.Root size="sm" >
               <Avatar.Fallback name="Segun Adebayo" />
               <Avatar.Image src={user.pic} />

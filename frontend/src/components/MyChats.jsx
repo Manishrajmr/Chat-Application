@@ -6,8 +6,9 @@ import { Box,Stack,Text} from '@chakra-ui/react';
 import { Button} from '@chakra-ui/react';
 import ChatLoading from './ChatLoading';
 import { getSender } from '../../config/ChatLogic';
+import GroupChatModal from './miscellaneous/GroupChatModal';
  
-const MyChats = () => {
+const MyChats = ({fetchAgain}) => {
 
   const [loggedUser, setLoggedUser] = useState();
  
@@ -38,7 +39,7 @@ const MyChats = () => {
     setLoggedUser(JSON.parse(localStorage.getItem("userInfo")));
     fetchChats();
     // eslint-disable-next-line
-  }, []);
+  }, [fetchAgain]);
 
   return (
     <Box
@@ -63,7 +64,13 @@ const MyChats = () => {
       >
         My Chats
        
-       <Button >New Group Chat</Button>
+    
+        
+
+        <GroupChatModal>
+              <Button >New Group Chat</Button>
+        </GroupChatModal>
+     
          
        
       </Box>
@@ -82,16 +89,17 @@ const MyChats = () => {
         overflowY="hidden"
       >
         {chats ? (
-          <Stack overflowY="scroll">
+          <Stack >
             {chats.map((chat) => (
               <Box
                 onClick={() => setSelectedChat(chat)}
                 cursor="pointer"
-                bg={selectedChat === chat ? "#38B2AC" : "#E8E8E8"}
+                bg={selectedChat === chat ? "#38B2AC" : "white"}
                 color={selectedChat === chat ? "white" : "black"}
                 px={3}
                 py={2}
                 borderRadius="sm"
+                borderWidth="1px "
                 key={chat._id}
                 _hover={{
                  background: "#38B2AC",
