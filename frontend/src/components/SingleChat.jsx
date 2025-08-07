@@ -9,6 +9,15 @@ import { useState } from 'react';
 import { Field, Input } from "@chakra-ui/react"
 import axios from 'axios';
 import ScrollableChat from './ScrollableChat';
+import  io from "socket.io-client";
+var socket, selectedChatCompare;
+
+// backend server end point
+
+const ENDPOINT = "http://localhost:400"
+
+// export default socket;
+
 
 const SingleChat = ({fetchAgain,setFetchAgain}) => {
 
@@ -16,6 +25,10 @@ const {user,selectedChat,setSelectedChat } = ChatState();
 const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [newMessage, setNewMessage] = useState("");
+    const [socketConnected, setSocketConnected] = useState(false);
+
+    const [ typing,setTyping] = useState(false);
+    const [ isTyping,setIsTyping] = useState(false);
 
 
   const fetchMessages = async ()=>{
@@ -36,6 +49,7 @@ const [messages, setMessages] = useState([]);
     
       setMessages(data);
       setLoading(false);
+      socket.emit("join chat", selectedChat._id);
 
     }
     
@@ -45,13 +59,41 @@ const [messages, setMessages] = useState([]);
 
   }
 
+   useEffect(() => {
+    socket = io(ENDPOINT);
+    socket.emit("setup", user);
+    socket.on("connected", () => setSocketConnected(true));
+    socket.on("typing", () => setIsTyping(true));
+    socket.on("stop typing", () => setIsTyping(false));
+
+    // eslint-disable-next-line
+  }, []);
+
   useEffect(()=>{
     fetchMessages();
+     selectedChatCompare = selectedChat;
   },[selectedChat])
+
+   useEffect(() => {
+    socket.on("message recieved", (newMessageRecieved) => {
+      if (
+        !selectedChatCompare || // if chat is not selected or doesn't match current chat
+        selectedChatCompare._id !== newMessageRecieved.chat._id
+      ) {
+        if (!notification.includes(newMessageRecieved)) {
+          setNotification([newMessageRecieved, ...notification]);
+          setFetchAgain(!fetchAgain);
+        }
+      } else {
+        setMessages([...messages, newMessageRecieved]);
+      }
+    });
+  });
+
 
  const sendMessage = async (event) => {
     if (event.key === "Enter"&& newMessage ) {
-      // socket.emit("stop typing", selectedChat._id);
+      socket.emit("stop typing", selectedChat._id);
       try {
         const config = {
           headers: {
@@ -71,7 +113,7 @@ const [messages, setMessages] = useState([]);
         );
         
         console.log(data)
-        // socket.emit("new message", data);
+        socket.emit("new message", data);
         setMessages([...messages, data]);
       } catch (error) {
         alert("faild to send message");
@@ -79,27 +121,33 @@ const [messages, setMessages] = useState([]);
       }
     }
   };
+  useEffect(()=>{
+       socket = io(ENDPOINT); // backend server
+       socket.emit("setup",user);
+       socket.on('connection',()=>setSocketConnected(true));
+  },[]);
 
-// const typingHandler = (e) => {
-//     setNewMessage(e.target.value);
 
-//     if (!socketConnected) return;
+const typingHandler = (e) => {
+    setNewMessage(e.target.value);
 
-//     if (!typing) {
-//       setTyping(true);
-//       socket.emit("typing", selectedChat._id);
-//     }
-//     let lastTypingTime = new Date().getTime();
-//     var timerLength = 3000;
-//     setTimeout(() => {
-//       var timeNow = new Date().getTime();
-//       var timeDiff = timeNow - lastTypingTime;
-//       if (timeDiff >= timerLength && typing) {
-//         socket.emit("stop typing", selectedChat._id);
-//         setTyping(false);
-//       }
-//     }, timerLength);
-//   };
+    if (!socketConnected) return;
+
+    if (!typing) {
+      setTyping(true);
+      socket.emit("typing", selectedChat._id);
+    }
+    let lastTypingTime = new Date().getTime();
+    var timerLength = 3000;
+    setTimeout(() => {
+      var timeNow = new Date().getTime();
+      var timeDiff = timeNow - lastTypingTime;
+      if (timeDiff >= timerLength && typing) {
+        socket.emit("stop typing", selectedChat._id);
+        setTyping(false);
+      }
+    }, timerLength);
+  };
 
   return (
    <>
@@ -153,6 +201,8 @@ const [messages, setMessages] = useState([]);
       <Field.Root  onKeyDown={sendMessage}
               id="first-name"
               mt={3} >
+
+                {isTyping ? <div>style={{color:red}} Typing...</div>:<></>}
     
       <Input placeholder="me@example.com" color="black"  variant="filled"
                 bg="#E0E0E0"

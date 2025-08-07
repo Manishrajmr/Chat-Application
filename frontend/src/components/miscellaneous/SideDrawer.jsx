@@ -210,8 +210,8 @@ const SideDrawer = () => {
   <Button variant="" size="sm" gap="20px">
     
      <Avatar.Root size="sm" >
-      <Avatar.Fallback name="Segun Adebayo" />
-      <Avatar.Image src="https://bit.ly/sage-adebayo" />
+      <Avatar.Fallback name={user.name} />
+      {/* <Avatar.Image src="https://bit.ly/sage-adebayo" /> */}
     </Avatar.Root>
 
     <i className="fas fa-chevron-down"></i>
