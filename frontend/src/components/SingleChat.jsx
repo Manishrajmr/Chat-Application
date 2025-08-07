@@ -8,6 +8,7 @@ import { Spinner, VStack } from "@chakra-ui/react"
 import { useState } from 'react';
 import { Field, Input } from "@chakra-ui/react"
 import axios from 'axios';
+import ScrollableChat from './ScrollableChat';
 
 const SingleChat = ({fetchAgain,setFetchAgain}) => {
 
@@ -49,7 +50,7 @@ const [messages, setMessages] = useState([]);
   },[selectedChat])
 
  const sendMessage = async (event) => {
-    if (event.key === "Enter" ) {
+    if (event.key === "Enter"&& newMessage ) {
       // socket.emit("stop typing", selectedChat._id);
       try {
         const config = {
@@ -140,8 +141,12 @@ const [messages, setMessages] = useState([]);
             overflowY="hidden">
       {loading ? (<Spinner alignSelf="center" w={20} h={20} size="xl" margin="auto"/>):
       (
-      <div>
-            {/* {messages} */}
+      <div style={{
+     height: "100%", // ya jo height chahiye ho
+     overflowY: "auto",
+     padding: "5px",
+     }} >
+            <ScrollableChat messages={messages} />
       </div>
       )}
 

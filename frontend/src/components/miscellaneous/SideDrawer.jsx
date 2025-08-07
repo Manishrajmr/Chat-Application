@@ -194,7 +194,7 @@ const SideDrawer = () => {
 
 
 
-    <Text fontSize="2xl" color="teal" >
+    <Text  sm={{fontSize:'2xl'}} color="teal" >
         BuzzTalk
     </Text>
     
