@@ -64,7 +64,7 @@ const MyChats = ({fetchAgain}) => {
       >
         My Chats
        
-    
+
         
 
         <GroupChatModal>

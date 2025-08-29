@@ -44,6 +44,30 @@ app.get("/", (req, res) => {
 
 
 
+// // --------------------------deployment------------------------------
+
+const __dirname1 = path.resolve();
+
+
+  app.use(express.static(path.join(__dirname1, "/frontend/dist")));
+
+//  app.get("/*", (req, res) => {
+//   res.sendFile(path.resolve(__dirname1, "frontend", "dist", "index.html"));
+// })
+app.get(/.*/, (req, res) => {
+  res.sendFile(path.resolve(__dirname1, "frontend", "dist", "index.html"));
+});
+
+
+
+// // --------------------------deployment------------------------------
+
+// // Error Handling middlewares
+// app.use(notFound);
+// app.use(errorHandler);
+
+
+
 PORT =  process.env.PORT || 3000;
 
 const server = app.listen(PORT, () => {
