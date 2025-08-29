@@ -1,6 +1,5 @@
 import React from 'react';
-import { Button } from '@chakra-ui/react';
-import { Badge, Stack } from "@chakra-ui/react"
+import { Badge } from "@chakra-ui/react"
 import { IoCloseSharp } from "react-icons/io5";
 
 

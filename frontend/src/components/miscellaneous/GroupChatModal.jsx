@@ -1,12 +1,11 @@
-"use client"
 
 import { Button, CloseButton, Dialog, Portal,Text,Input,Box } from "@chakra-ui/react"
 import { Children } from "react";
 import axios from "axios";
 import { useState } from "react";
 import { ChatState } from "../../Context/ChatProvider";
-import UserBadgeItem from "../userAvatar/UserBadgeItem";
-import UserListItem from "../userAvatar/UserListItem";
+import UserBadgeItem from "../UserAvatar/UserBadgeItem";
+import UserListItem from "../UserAvatar/UserListItem";
 
 const GroupChatModal = ({children}) => {
 
