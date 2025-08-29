@@ -12,7 +12,7 @@ export default defineConfig({
    server: {
     proxy: {
       '/api': {
-        target: 'http://localhost:400', // 🟢 tumhara backend server
+        target: 'https://chat-application-g7r8-git-main-manish-rajs-projects-f5ae813e.vercel.app/', // 🟢 tumhara backend server
         changeOrigin: true,
         secure: false,
       },
