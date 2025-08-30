@@ -69,7 +69,7 @@ const SideDrawer = () => {
       };
       console.log("started");
 
-      const { data } = await axios.get(`http://localhost:400/api/user?search=${search}`,config);
+      const { data } = await axios.get(`https://chat-application-g7r8-d2ugardhl-manish-rajs-projects-f5ae813e.vercel.app/api/user?search=${search}`,config);
 
       console.log(data);
 
