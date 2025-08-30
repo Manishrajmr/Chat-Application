@@ -30,7 +30,7 @@ const handleSignup = async () => {
     }
 
     try {
-      const response = await axios.post("http://localhost:400/api/user", {
+      const response = await axios.post("http:/https://chat-application-g7r8-d2ugardhl-manish-rajs-projects-f5ae813e.vercel.app/api/user", {
         name,
         email,
         password,
