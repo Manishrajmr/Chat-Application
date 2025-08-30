@@ -21,7 +21,7 @@ const Login = () => {
     }
 
     try {
-      const {data} = await axios.post("http://localhost:400/api/user/login", {
+      const {data} = await axios.post("http:/https://chat-application-g7r8-d2ugardhl-manish-rajs-projects-f5ae813e.vercel.app/api/user/login", {
         email,
         password,
       });
